@@ -188,15 +188,6 @@ def render_main_layout(
             unsafe_allow_html=True,
         )
 
-        st.markdown("---")
-        st.subheader("Need more advanced analysis?")
-        st.write("Possible next features:")
-        st.write("- Pp / Ppk")
-        st.write("- Capability plot")
-        st.write("- PDF report")
-        st.write("- Multiple column analysis")
-        st.link_button("Join waitlist / request features", "https://forms.gle/2sQdwEbdmH4JPKjD7")
-
 
 def render_details(data: pd.Series) -> None:
     with st.expander("Show raw data"):
@@ -207,3 +198,23 @@ def render_details(data: pd.Series) -> None:
         st.write("CPU = (USL - Mean) / (3σ)")
         st.write("CPL = (Mean - LSL) / (3σ)")
         st.write("Cpk = min(CPU, CPL)")
+
+
+def render_footer() -> None:
+    st.markdown("---")
+    st.subheader("Need more advanced analysis?")
+    st.write("Possible next features:")
+    st.write("- Pp / Ppk")
+    st.write("- Capability plot")
+    st.write("- PDF report")
+    st.write("- Multiple column analysis")
+
+    st.write(
+        "I'm building tools for quality and manufacturing engineers. "
+        "Your feedback helps decide what features to build next."
+    )
+
+    st.link_button(
+        "Give feedback (30 seconds)",
+        "https://forms.gle/2sQdwEbdmH4JPKjD7"
+    )
