@@ -12,6 +12,7 @@ def render_hero() -> None:
             <div class="hero-title">Cp / Cpk Calculator</div>
             <div class="hero-sub">
                 Simple process capability analysis for quality and manufacturing engineers.
+                ⭐ If this tool helps you, please share it with another engineer.
             </div>
             <div class="small-note">
                 Upload a CSV, enter LSL and USL, and get instant capability metrics with a practical interpretation.
