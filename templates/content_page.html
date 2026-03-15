@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="content-hero">
+    <div class="container narrow">
+        <p class="eyebrow">Process Capability Guide</p>
+        <h1>{{ page.heading }}</h1>
+        <p class="hero-copy">{{ page.intro }}</p>
+    </div>
+</section>
+
+<section class="container narrow content-stack">
+    {% for section in page.sections %}
+    <article class="panel">
+        <h2>{{ section.title }}</h2>
+        <p>{{ section.body }}</p>
+    </article>
+    {% endfor %}
+
+    <article class="panel callout">
+        <h2>Try the calculator</h2>
+        <p>Use the calculator on the main page to compare sample data, upload your own measurements, and see how Cp and Cpk change with different specification limits.</p>
+        <a class="button button-primary" href="{{ url_for('index') }}">Open the calculator</a>
+    </article>
+</section>
+{% endblock %}

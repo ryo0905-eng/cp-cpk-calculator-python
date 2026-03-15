@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Cp / Cpk Calculator",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "{{ meta_description }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-shell">
+        <div class="hero-copy-block">
+            <p class="eyebrow">Process Capability Analysis</p>
+            <h1>Cp / Cpk calculator built for fast, search-friendly quality workflows.</h1>
+            <p class="hero-copy">Upload a CSV or use sample data, calculate Cp and Cpk instantly, and review practical interpretation without a JavaScript-heavy app shell.</p>
+            <div class="hero-links">
+                <a class="button button-primary" href="#calculator">Open calculator</a>
+                <a class="button button-secondary" href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Learn Cp vs Cpk</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container app-grid" id="calculator">
+    <form class="panel form-panel" method="post" enctype="multipart/form-data">
+        <h2>Input</h2>
+        <label class="field">
+            <span>Data source</span>
+            <select name="input_mode">
+                <option value="upload" {% if form.input_mode == "upload" %}selected{% endif %}>Upload CSV</option>
+                <option value="sample" {% if form.input_mode == "sample" %}selected{% endif %}>Use sample data</option>
+            </select>
+        </label>
+
+        <label class="field">
+            <span>CSV file</span>
+            <input type="file" name="uploaded_file" accept=".csv">
+            <small>Use a CSV where the first column contains measurement values.</small>
+        </label>
+
+        <label class="field">
+            <span>Sample dataset</span>
+            <select name="sample_key">
+                {% for key, sample in sample_options.items() %}
+                <option value="{{ key }}" {% if form.sample_key == key %}selected{% endif %}>{{ sample.label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <div class="field-row">
+            <label class="field">
+                <span>USL</span>
+                <input type="number" name="usl" value="{{ form.usl }}" step="0.1" required>
+            </label>
+            <label class="field">
+                <span>LSL</span>
+                <input type="number" name="lsl" value="{{ form.lsl }}" step="0.1" required>
+            </label>
+        </div>
+
+        <button class="button button-primary" type="submit">Calculate capability</button>
+
+        <div class="download-list">
+            <h3>Sample CSVs</h3>
+            {% for key, sample in sample_options.items() %}
+            <a href="{{ url_for('download_sample', sample_key=key) }}">{{ sample.filename }}</a>
+            {% endfor %}
+        </div>
+    </form>
+
+    <div class="results-column">
+        {% if error_message %}
+        <div class="panel alert alert-error">
+            <strong>Check your input.</strong>
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <section class="metrics-grid">
+            <article class="metric-card"><span>Sample Size</span><strong>{{ results.n }}</strong></article>
+            <article class="metric-card"><span>Mean</span><strong>{{ "%.4f"|format(results.mean) }}</strong></article>
+            <article class="metric-card"><span>Std Dev</span><strong>{{ "%.4f"|format(results.std) }}</strong></article>
+            <article class="metric-card"><span>Cp</span><strong>{{ "%.3f"|format(results.cp) }}</strong></article>
+            <article class="metric-card"><span>CPU</span><strong>{{ "%.3f"|format(results.cpu) }}</strong></article>
+            <article class="metric-card"><span>CPL</span><strong>{{ "%.3f"|format(results.cpl) }}</strong></article>
+            <article class="metric-card"><span>Cpk</span><strong>{{ "%.3f"|format(results.cpk) }}</strong></article>
+        </section>
+
+        <section class="panel {{ status.level }}">
+            <h2>{{ status.title }}</h2>
+            <p>{{ status.message }}</p>
+        </section>
+
+        <section class="panel chart-panel">
+            <h2>Distribution</h2>
+            {{ chart_html|safe }}
+        </section>
+
+        <section class="panel two-col">
+            <div>
+                <h2>Recommended next checks</h2>
+                <ul>
+                    {% for item in recommendations %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h2>Formula reference</h2>
+                <p>Cp = (USL - LSL) / (6 sigma)</p>
+                <p>CPU = (USL - Mean) / (3 sigma)</p>
+                <p>CPL = (Mean - LSL) / (3 sigma)</p>
+                <p>Cpk = min(CPU, CPL)</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Raw data</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for value in raw_values %}
+                        <tr><td>{{ value }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% else %}
+        <section class="panel empty-state">
+            <h2>Run your first calculation</h2>
+            <p>Start with a CSV upload or choose sample data to see capability metrics, interpretation, and the distribution chart.</p>
+        </section>
+        {% endif %}
+    </div>
+</section>
+
+<section class="container seo-grid">
+    <article class="panel">
+        <h2>What makes a useful Cp / Cpk calculator page?</h2>
+        <p>For search traffic, the calculator should do more than compute numbers. It should explain the formulas, the interpretation, and what to do when Cp and Cpk disagree.</p>
+    </article>
+    <article class="panel">
+        <h2>Good next SEO pages</h2>
+        <p>Publishing deeper pages for Pp, Ppk, control charts, and capability report examples can help capture more engineering search intent over time.</p>
+    </article>
+</section>
+{% endblock %}

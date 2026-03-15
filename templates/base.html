@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ meta_description }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ meta_description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-shell">
+            <a class="brand" href="{{ url_for('index') }}">Cp / Cpk Calculator</a>
+            <nav class="site-nav">
+                <a href="{{ url_for('index') }}">Calculator</a>
+                <a href="{{ url_for('content_page', slug='what-is-cp') }}">What Is Cp</a>
+                <a href="{{ url_for('content_page', slug='what-is-cpk') }}">What Is Cpk</a>
+                <a href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Cp vs Cpk</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h2>For quality and manufacturing engineers</h2>
+                <p>Use the calculator for quick process capability checks, then expand into deeper analysis as your workflow grows.</p>
+            </div>
+            <div>
+                <h2>Next feature ideas</h2>
+                <p>Pp / Ppk, capability report PDF, and multi-column analysis are natural next steps for this tool.</p>
+            </div>
+        </div>
+        <div class="container support-strip">
+            <div class="support-copy">
+                <p>I'm building tools for quality and manufacturing engineers. Your feedback helps decide what features to build next.</p>
+                <p>If this tool helped you save time, consider buying me a coffee.</p>
+            </div>
+            <div class="support-actions">
+                <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer">Give feedback</a>
+                <a class="button button-primary" href="https://buymeacoffee.com/ryo.aihub" target="_blank" rel="noopener noreferrer">Buy me a coffee</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
