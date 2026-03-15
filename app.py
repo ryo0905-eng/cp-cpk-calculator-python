@@ -10,6 +10,7 @@ from ui import (
     render_status,
     render_summary,
     render_footer,
+    render_buy_me_a_coffee,
 )
 
 
@@ -47,6 +48,7 @@ try:
     render_main_layout(data, usl, lsl, status_title, status_message, recommendations)
     render_details(data)
     render_footer()
+    render_buy_me_a_coffee()
 
 except Exception as e:
     st.error(f"An error occurred: {e}")

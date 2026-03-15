@@ -9,7 +9,7 @@ def render_hero() -> None:
     st.markdown(
         """
         <div class="hero-box">
-            <div class="hero-title">Cp / Cpk Calculator</div>
+            <div class="hero-title">Process Capability Calculator (Cp, Cpk)</div>
             <div class="hero-sub">
                 Simple process capability analysis for quality and manufacturing engineers.
                 ⭐ If this tool helps you, please share it with another engineer.
@@ -219,3 +219,13 @@ def render_footer() -> None:
         "Give feedback (30 seconds)",
         "https://forms.gle/2sQdwEbdmH4JPKjD7"
     )
+
+
+def render_buy_me_a_coffee() -> None:
+    st.markdown(
+"If this tool helped you save time, consider buying me a coffee ☕"
+)
+    st.link_button(
+    "☕ Buy me a coffee",
+    "https://buymeacoffee.com/ryo.aihub"
+)
