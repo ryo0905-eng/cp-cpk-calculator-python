@@ -176,6 +176,41 @@ h1 {
     gap: 8px;
 }
 
+.sample-switcher {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--soft);
+}
+
+.sample-switcher span {
+    font-weight: 700;
+}
+
+.sample-switcher-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip-button {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.chip-button:hover {
+    background: #f7f3eb;
+}
+
 .field {
     margin-bottom: 16px;
 }

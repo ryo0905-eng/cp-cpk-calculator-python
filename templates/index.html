@@ -63,6 +63,14 @@
 <section class="container app-grid" id="calculator">
     <form class="panel form-panel" method="post" enctype="multipart/form-data">
         <h2>Cp / Cpk calculator input</h2>
+        <div class="sample-switcher">
+            <span>Quick sample views</span>
+            <div class="sample-switcher-actions">
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='good'">Good process</button>
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='shifted'">Shifted process</button>
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='high-variation'">High variation</button>
+            </div>
+        </div>
         <label class="field">
             <span>Data source</span>
             <select name="input_mode">

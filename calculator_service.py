@@ -9,7 +9,7 @@ from analysis import calculate_capability, interpret_results, make_histogram, re
 from sample_catalog import get_sample_series
 
 DEFAULT_FORM = {
-    "input_mode": "upload",
+    "input_mode": "sample",
     "sample_key": "good",
     "usl": "10",
     "lsl": "0",
@@ -43,7 +43,7 @@ def get_form_state(form_data) -> dict:
 
 
 def build_initial_calculator_state() -> dict:
-    return {
+    state = {
         "form": DEFAULT_FORM.copy(),
         "results": None,
         "status": None,
@@ -52,6 +52,13 @@ def build_initial_calculator_state() -> dict:
         "raw_values": [],
         "error_message": None,
     }
+
+    try:
+        state.update(run_calculation(state["form"], uploaded_file=None))
+    except Exception as exc:
+        state["error_message"] = str(exc)
+
+    return state
 
 
 def run_calculation(form: dict, uploaded_file) -> dict:
