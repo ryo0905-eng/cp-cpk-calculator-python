@@ -11,6 +11,38 @@
   "description": "{{ meta_description }}"
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between Cp and Cpk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cp measures potential process capability based on spread only, while Cpk measures actual process capability by considering both spread and centering."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good Cpk value?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Many manufacturing teams use Cpk 1.33 as a common target, although the right threshold depends on product risk, customer requirements, and process stability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I calculate Cp and Cpk from a CSV file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Upload a CSV with measurement values in the first column, enter the upper and lower specification limits, and the calculator returns Cp, CPU, CPL, and Cpk."
+      }
+    }
+  ]
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -18,8 +50,8 @@
     <div class="container hero-shell">
         <div class="hero-copy-block">
             <p class="eyebrow">Process Capability Analysis</p>
-            <h1>Cp / Cpk calculator built for fast, search-friendly quality workflows.</h1>
-            <p class="hero-copy">Upload a CSV or use sample data, calculate Cp and Cpk instantly, and review practical interpretation without a JavaScript-heavy app shell.</p>
+            <h1>Free Cp and Cpk calculator for process capability analysis.</h1>
+            <p class="hero-copy">Use this Cp / Cpk calculator to upload process data, calculate process capability indices, and review clear interpretation for manufacturing and quality engineering workflows.</p>
             <div class="hero-links">
                 <a class="button button-primary" href="#calculator">Open calculator</a>
                 <a class="button button-secondary" href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Learn Cp vs Cpk</a>
@@ -30,7 +62,7 @@
 
 <section class="container app-grid" id="calculator">
     <form class="panel form-panel" method="post" enctype="multipart/form-data">
-        <h2>Input</h2>
+        <h2>Cp / Cpk calculator input</h2>
         <label class="field">
             <span>Data source</span>
             <select name="input_mode">
@@ -139,8 +171,8 @@
         </section>
         {% else %}
         <section class="panel empty-state">
-            <h2>Run your first calculation</h2>
-            <p>Start with a CSV upload or choose sample data to see capability metrics, interpretation, and the distribution chart.</p>
+            <h2>Run your first process capability calculation</h2>
+            <p>Upload a CSV or choose sample data to calculate Cp and Cpk, review the histogram, and understand whether the process is centered and capable.</p>
         </section>
         {% endif %}
     </div>
@@ -148,12 +180,31 @@
 
 <section class="container seo-grid">
     <article class="panel">
-        <h2>What makes a useful Cp / Cpk calculator page?</h2>
-        <p>For search traffic, the calculator should do more than compute numbers. It should explain the formulas, the interpretation, and what to do when Cp and Cpk disagree.</p>
+        <h2>How to use this Cp and Cpk calculator</h2>
+        <p>This process capability calculator is designed for engineers who need a quick way to evaluate whether a process can meet specification limits. Enter the upper specification limit and lower specification limit, then upload measured values from a CSV file. The calculator returns Cp, CPU, CPL, and Cpk so you can compare process spread and process centering in one place.</p>
     </article>
     <article class="panel">
-        <h2>Good next SEO pages</h2>
-        <p>Publishing deeper pages for Pp, Ppk, control charts, and capability report examples can help capture more engineering search intent over time.</p>
+        <h2>How to interpret process capability results</h2>
+        <p>If Cp is high but Cpk is low, the process variation may be acceptable but the process mean is likely shifted toward one specification limit. If both Cp and Cpk are low, the process usually needs variation reduction before it can be considered capable. Reviewing both values together gives a more reliable view than using either metric alone.</p>
+    </article>
+    <article class="panel">
+        <h2>Why engineers compare Cp vs Cpk</h2>
+        <p>Cp tells you about potential capability when the process is centered. Cpk tells you about actual capability after centering is considered. That is why many teams search for Cp vs Cpk, what is a good Cpk, or how to calculate process capability before making decisions about machine setup, process adjustment, or customer reporting.</p>
+    </article>
+    <article class="panel">
+        <h2>Frequently asked questions</h2>
+        <h3>What is a good Cp value?</h3>
+        <p>Many teams look for Cp values above 1.33, but the right threshold depends on tolerance, customer expectations, and process risk.</p>
+        <h3>What is a good Cpk value?</h3>
+        <p>A Cpk of 1.33 is a common target in manufacturing, although some processes require higher capability depending on the application.</p>
+        <h3>Can I calculate Cp and Cpk from sample data?</h3>
+        <p>Yes. You can use the included sample datasets to compare a capable process, a shifted process, and a high-variation process before uploading your own CSV.</p>
+        <h3>Do I need both Cp and Cpk?</h3>
+        <p>Yes. Looking at both metrics helps you separate variation problems from centering problems, which leads to better process capability decisions.</p>
+    </article>
+    <article class="panel">
+        <h2>Related process capability topics</h2>
+        <p>After Cp and Cpk, many engineers move on to Pp and Ppk, control charts, measurement system analysis, and capability report examples. Expanding into those topics can help you build a stronger process capability workflow over time.</p>
     </article>
 </section>
 {% endblock %}
