@@ -1,7 +1,7 @@
 CONTENT_PAGES = {
     "what-is-cp": {
-        "title": "What Is Cp? Process Capability Index Explained",
-        "description": "Learn what Cp means, how to calculate it, and when it helps evaluate process spread against specification limits.",
+        "title": "What Is Cp? Cp Formula, Meaning, and Good Cp Values",
+        "description": "Learn what Cp means in process capability analysis, how to use the Cp formula, and what a good Cp value looks like in manufacturing.",
         "heading": "What Is Cp?",
         "intro": "Cp is a process capability index that compares the specification width with the natural spread of the process. Engineers use Cp when they want to understand potential capability before judging whether the process is centered.",
         "sections": [
@@ -24,8 +24,8 @@ CONTENT_PAGES = {
         ],
     },
     "what-is-cpk": {
-        "title": "What Is Cpk? Process Centering and Capability",
-        "description": "Understand Cpk, how it differs from Cp, and how it reflects both variation and process centering.",
+        "title": "What Is Cpk? Cpk Formula, Meaning, and Good Cpk Values",
+        "description": "Understand what Cpk means, how the Cpk formula works, and what a good Cpk value looks like for process capability analysis.",
         "heading": "What Is Cpk?",
         "intro": "Cpk is a process capability index that reflects both process variation and process centering. It shows how close the process mean is to the nearest specification limit, which makes it one of the most common metrics in manufacturing capability analysis.",
         "sections": [
@@ -48,8 +48,8 @@ CONTENT_PAGES = {
         ],
     },
     "cp-vs-cpk": {
-        "title": "Cp vs Cpk: What Is the Difference?",
-        "description": "Compare Cp and Cpk side by side and learn when each process capability metric matters most.",
+        "title": "Cp vs Cpk: Difference, Interpretation, and Examples",
+        "description": "Compare Cp vs Cpk, understand the key difference between process spread and centering, and learn how to interpret both metrics together.",
         "heading": "Cp vs Cpk",
         "intro": "Cp and Cpk are closely related process capability metrics, but they answer different questions. Looking at both helps you avoid misreading a process that is statistically tight but operationally off-center.",
         "sections": [
@@ -68,6 +68,30 @@ CONTENT_PAGES = {
             {
                 "title": "When engineers search for Cp vs Cpk",
                 "body": "Teams often compare Cp vs Cpk when preparing customer reports, troubleshooting defects near a specification limit, or deciding whether a process needs centering adjustment or variation reduction.",
+            },
+        ],
+    },
+    "what-is-pp-ppk": {
+        "title": "What Are Pp and Ppk? Process Performance Indices Explained",
+        "description": "Learn what Pp and Ppk mean, how they differ from Cp and Cpk, and when to use process performance indices in quality analysis.",
+        "heading": "What Are Pp and Ppk?",
+        "intro": "Pp and Ppk are process performance indices that look similar to Cp and Cpk, but they are typically used to evaluate overall performance over a broader time period rather than short-term capability.",
+        "sections": [
+            {
+                "title": "What Pp measures",
+                "body": "Pp compares the specification width with the overall variation of the process. It is similar to Cp, but it uses long-term performance data rather than a short-term estimate of capability.",
+            },
+            {
+                "title": "What Ppk measures",
+                "body": "Ppk adds process centering to the picture, much like Cpk. It shows how close the long-term process mean is to the nearest specification limit while accounting for overall variation.",
+            },
+            {
+                "title": "Pp and Ppk vs Cp and Cpk",
+                "body": "Cp and Cpk are often used for short-term process capability, while Pp and Ppk are commonly used for long-term process performance. Comparing both sets of indices can reveal whether capability holds up over time.",
+            },
+            {
+                "title": "Why Pp and Ppk matter",
+                "body": "If short-term capability looks strong but long-term performance is weak, the process may be drifting over time due to setup changes, material shifts, environmental conditions, or measurement instability.",
             },
         ],
     },

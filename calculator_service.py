@@ -16,8 +16,8 @@ DEFAULT_FORM = {
 }
 
 CALCULATOR_PAGE = {
-    "page_title": "Cp / Cpk Calculator for Process Capability Analysis",
-    "meta_description": "Free Cp and Cpk calculator with CSV upload, sample data, interpretation, and practical guidance for manufacturing and quality engineers.",
+    "page_title": "Cp Cpk Calculator | Free Process Capability Calculator",
+    "meta_description": "Free Cp and Cpk calculator for process capability analysis. Upload CSV data, enter USL and LSL, and calculate Cp, Cpk, CPU, and CPL with interpretation.",
 }
 
 
