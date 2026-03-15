@@ -318,6 +318,10 @@ td {
     justify-content: flex-end;
 }
 
+.support-link-fallback {
+    font-size: 0.95rem;
+}
+
 @media (max-width: 960px) {
     .app-grid,
     .two-col,

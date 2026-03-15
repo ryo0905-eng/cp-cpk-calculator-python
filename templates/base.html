@@ -11,6 +11,22 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ canonical_url }}">
     <meta name="twitter:card" content="summary_large_image">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-71Y5PVPJTR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-71Y5PVPJTR');
+
+        function trackOutboundClick(eventName, linkUrl) {
+            gtag('event', eventName, {
+                event_category: 'engagement',
+                event_label: linkUrl,
+                link_url: linkUrl,
+            });
+        }
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% block head_extra %}{% endblock %}
 </head>
@@ -49,7 +65,7 @@
                 <p>If this tool helped you save time, consider buying me a coffee.</p>
             </div>
             <div class="support-actions">
-                <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer">Give feedback</a>
+                <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_feedback', this.href)">Give feedback</a>
                 <script
                     type="text/javascript"
                     src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
@@ -63,6 +79,7 @@
                     data-font-color="#000000"
                     data-coffee-color="#ffffff"
                 ></script>
+                <a class="support-link-fallback" href="https://buymeacoffee.com/ryo.aihub" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_buy_me_a_coffee', this.href)">Support via Buy Me a Coffee</a>
             </div>
         </div>
     </footer>
