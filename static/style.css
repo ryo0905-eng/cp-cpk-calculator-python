@@ -170,6 +170,10 @@ h1 {
     gap: 18px;
 }
 
+.form-panel {
+    align-self: start;
+}
+
 .field,
 .field-row {
     display: grid;
@@ -364,6 +368,14 @@ td {
         grid-template-columns: 1fr;
     }
 
+    .form-panel {
+        order: 2;
+    }
+
+    .results-column {
+        order: 1;
+    }
+
     .metrics-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -374,16 +386,9 @@ td {
         position: static;
     }
 
-    .nav-shell,
-    .site-nav,
-    .field-row,
-    .metrics-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .nav-shell,
-    .site-nav {
-        display: grid;
+    .container,
+    .narrow {
+        width: min(100% - 24px, 1120px);
     }
 
     .support-strip {
@@ -395,7 +400,117 @@ td {
         justify-content: flex-start;
     }
 
+    .nav-shell {
+        display: grid;
+        gap: 12px;
+        padding: 14px 0;
+    }
+
+    .site-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .site-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .site-nav a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 253, 248, 0.92);
+    }
+
+    .hero,
+    .content-hero {
+        padding: 28px 0 18px;
+    }
+
     h1 {
-        font-size: 2.5rem;
+        font-size: 2.25rem;
+        line-height: 1.05;
+    }
+
+    h2 {
+        font-size: 1.45rem;
+    }
+
+    .hero-copy {
+        font-size: 1rem;
+    }
+
+    .hero-links,
+    .field-row,
+    .sample-switcher-actions,
+    .support-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .button,
+    .chip-button {
+        width: 100%;
+        min-height: 48px;
+    }
+
+    .app-grid {
+        gap: 18px;
+    }
+
+    .panel,
+    .metric-card {
+        border-radius: 18px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .metric-card {
+        padding: 14px;
+    }
+
+    .metric-card strong {
+        margin-top: 8px;
+        font-size: 1.45rem;
+    }
+
+    .sample-switcher {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    input,
+    select {
+        min-height: 48px;
+    }
+
+    th,
+    td {
+        padding: 9px 10px;
+        font-size: 0.94rem;
+    }
+
+    .table-wrap {
+        max-height: 260px;
+    }
+
+    .support-link-fallback {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
     }
 }
