@@ -192,3 +192,34 @@ CONTENT_PAGES = {
         ],
     },
 }
+
+
+RELATED_PAGE_MAP = {
+    "what-is-cp": ["cp-vs-cpk", "cp-formula", "how-to-calculate-cp-cpk"],
+    "what-is-cpk": ["what-is-a-good-cpk-value", "cp-vs-cpk", "how-to-calculate-cp-cpk"],
+    "cp-vs-cpk": ["what-is-cp", "what-is-cpk", "what-is-a-good-cpk-value"],
+    "what-is-pp-ppk": ["pp-vs-ppk", "cp-vs-cpk", "how-to-calculate-cp-cpk"],
+    "what-is-a-good-cpk-value": ["what-is-cpk", "cp-vs-cpk", "how-to-calculate-cp-cpk"],
+    "how-to-calculate-cp-cpk": ["cp-formula", "what-is-cp", "what-is-cpk"],
+    "cp-formula": ["what-is-cp", "how-to-calculate-cp-cpk", "cp-vs-cpk"],
+    "pp-vs-ppk": ["what-is-pp-ppk", "cp-vs-cpk", "what-is-a-good-cpk-value"],
+}
+
+
+def get_related_pages(slug: str) -> list[dict]:
+    related_slugs = RELATED_PAGE_MAP.get(slug, [])
+    related_pages = []
+
+    for related_slug in related_slugs:
+        page = CONTENT_PAGES.get(related_slug)
+        if page is None:
+            continue
+        related_pages.append(
+            {
+                "slug": related_slug,
+                "heading": page["heading"],
+                "description": page["description"],
+            }
+        )
+
+    return related_pages

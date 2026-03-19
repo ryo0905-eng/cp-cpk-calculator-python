@@ -595,6 +595,39 @@ thead th {
     padding-bottom: 52px;
 }
 
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.related-card {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(248, 250, 252, 0.92);
+    color: var(--text);
+    transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.related-card strong {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1rem;
+}
+
+.related-card span {
+    color: var(--muted);
+    font-size: 0.94rem;
+}
+
+.related-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(29, 78, 216, 0.18);
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
 .callout {
     background:
         linear-gradient(135deg, rgba(29, 78, 216, 0.05), rgba(15, 118, 110, 0.06)),
@@ -650,7 +683,8 @@ thead th {
     .hero-grid,
     .app-grid,
     .two-col,
-    .footer-grid {
+    .footer-grid,
+    .related-grid {
         grid-template-columns: 1fr;
     }
 
