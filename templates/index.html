@@ -47,22 +47,77 @@
 
 {% block content %}
 <section class="hero">
-    <div class="container hero-shell">
+    <div class="container hero-shell hero-grid">
         <div class="hero-copy-block">
-            <p class="eyebrow">Process Capability Analysis</p>
-            <h1>Free Cp and Cpk calculator for process capability analysis.</h1>
-            <p class="hero-copy">Use this Cp / Cpk calculator to upload process data, calculate process capability indices, and review clear interpretation for manufacturing and quality engineering workflows.</p>
+            <p class="eyebrow">Process Capability Analysis Platform</p>
+            <h1>Process capability analysis built for quality and manufacturing teams.</h1>
+            <p class="hero-copy">Calculate Cp, Cpk, Pp, and Ppk in a clear, modern workspace designed for practical engineering review and day-to-day process decisions.</p>
+            <div class="hero-badges">
+                <span>Practical workflow</span>
+                <span>CSV upload</span>
+                <span>Clear interpretation</span>
+                <span>Sample comparisons</span>
+            </div>
             <div class="hero-links">
                 <a class="button button-primary" href="#calculator">Open calculator</a>
                 <a class="button button-secondary" href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Learn Cp vs Cpk</a>
             </div>
         </div>
+        <aside class="hero-preview panel">
+            <div class="hero-preview-head">
+                <div>
+                    <p class="eyebrow">Live Snapshot</p>
+                    <h2>Capability summary</h2>
+                </div>
+                <span class="status-pill {{ status.level if status else 'success' }}">{{ status.title if status else 'Sample loaded' }}</span>
+            </div>
+            <div class="preview-metrics">
+                <article>
+                    <span>Cp</span>
+                    <strong>{% if results %}{{ "%.2f"|format(results.cp) }}{% else %}--{% endif %}</strong>
+                </article>
+                <article>
+                    <span>Cpk</span>
+                    <strong>{% if results %}{{ "%.2f"|format(results.cpk) }}{% else %}--{% endif %}</strong>
+                </article>
+                <article>
+                    <span>Pp</span>
+                    <strong>{% if results and results.pp is defined %}{{ "%.2f"|format(results.pp) }}{% else %}--{% endif %}</strong>
+                </article>
+                <article>
+                    <span>Ppk</span>
+                    <strong>{% if results and results.ppk is defined %}{{ "%.2f"|format(results.ppk) }}{% else %}--{% endif %}</strong>
+                </article>
+            </div>
+            <div class="preview-chart" aria-hidden="true">
+                <div class="preview-chart-bars">
+                    <span style="height: 34%"></span>
+                    <span style="height: 58%"></span>
+                    <span style="height: 76%"></span>
+                    <span style="height: 62%"></span>
+                    <span style="height: 86%"></span>
+                    <span style="height: 54%"></span>
+                    <span style="height: 42%"></span>
+                    <span style="height: 30%"></span>
+                </div>
+                <div class="preview-chart-line">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <p class="preview-copy">Use the built-in sample sets to compare a healthy process, an off-center process, and a high-variation process before uploading your own data.</p>
+        </aside>
     </div>
 </section>
 
 <section class="container app-grid" id="calculator">
     <form class="panel form-panel" method="post" enctype="multipart/form-data">
-        <h2>Cp / Cpk calculator input</h2>
+        <div class="section-intro">
+            <p class="eyebrow">Input Workspace</p>
+            <h2><span class="section-icon">01</span> Cp / Cpk calculator input</h2>
+            <p>Upload your own data or start from a guided sample view to see how the metrics behave.</p>
+        </div>
         <div class="sample-switcher">
             <span>Quick sample views</span>
             <div class="sample-switcher-actions">
@@ -124,6 +179,15 @@
         {% endif %}
 
         {% if results %}
+        <section class="panel results-header">
+            <div>
+                <p class="eyebrow">Analysis Output</p>
+                <h2><span class="section-icon">02</span> Capability overview</h2>
+                <p>Review spread, centering, and next checks in a structured results view suitable for engineering work.</p>
+            </div>
+            <a class="button button-secondary" href="{{ url_for('content_page', slug='what-is-a-good-cpk-value') }}">Interpret Cpk</a>
+        </section>
+
         <section class="metrics-grid">
             <article class="metric-card"><span>Sample Size</span><strong>{{ results.n }}</strong></article>
             <article class="metric-card"><span>Mean</span><strong>{{ "%.4f"|format(results.mean) }}</strong></article>

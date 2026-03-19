@@ -11,6 +11,9 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ canonical_url }}">
     <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-71Y5PVPJTR"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -36,10 +39,8 @@
             <a class="brand" href="{{ url_for('index') }}">Cp / Cpk Calculator</a>
             <nav class="site-nav">
                 <a href="{{ url_for('index') }}">Calculator</a>
-                <a href="{{ url_for('content_page', slug='what-is-cp') }}">What Is Cp</a>
-                <a href="{{ url_for('content_page', slug='what-is-cpk') }}">What Is Cpk</a>
                 <a href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Cp vs Cpk</a>
-                <a href="{{ url_for('content_page', slug='what-is-pp-ppk') }}">What Is Pp Ppk</a>
+                <a href="{{ url_for('content_page', slug='what-is-pp-ppk') }}">Pp / Ppk</a>
                 <a href="{{ url_for('content_page', slug='what-is-a-good-cpk-value') }}">Good Cpk Value</a>
             </nav>
         </div>
