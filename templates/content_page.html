@@ -30,6 +30,26 @@
   ]
 }
 </script>
+{% if faqs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in faqs %}
+    {
+      "@type": "Question",
+      "name": {{ faq.question|tojson }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ faq.answer|tojson }}
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -59,6 +79,20 @@
         <p>Use the calculator on the main page to compare sample data, upload your own measurements, and see how Cp and Cpk change with different specification limits.</p>
         <a class="button button-primary" href="{{ url_for('index') }}">Open the calculator</a>
     </article>
+
+    {% if faqs %}
+    <section class="panel">
+        <h2>Frequently asked questions</h2>
+        <div class="faq-list">
+            {% for faq in faqs %}
+            <article class="faq-item">
+                <h3>{{ faq.question }}</h3>
+                <p>{{ faq.answer }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
 
     {% if related_pages %}
     <section class="panel">

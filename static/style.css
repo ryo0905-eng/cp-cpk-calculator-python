@@ -595,6 +595,23 @@ thead th {
     padding-bottom: 52px;
 }
 
+.faq-list {
+    display: grid;
+    gap: 16px;
+}
+
+.faq-item {
+    padding-top: 2px;
+}
+
+.faq-item h3 {
+    margin-bottom: 8px;
+}
+
+.faq-item p {
+    margin: 0;
+}
+
 .related-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
