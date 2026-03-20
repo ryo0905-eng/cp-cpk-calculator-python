@@ -30,7 +30,7 @@
             });
         }
     </script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=config['STATIC_ASSET_VERSION']) }}">
     {% block head_extra %}{% endblock %}
 </head>
 <body>
