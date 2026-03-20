@@ -1,7 +1,7 @@
 # Cp vs Cpk Calculator (Python) – Free Process Capability Tool
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Tool-blue)](https://tools.ryo-aihub.com/)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/cp-cpk-calculator-python?style=social)](https://github.com/yourusername/cp-cpk-calculator-python)
+[![GitHub stars](https://img.shields.io/github/stars/ryo0905-eng/cp-cpk-calculator-python?style=social)](https://github.com/ryo0905-eng/cp-cpk-calculator-python)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 Calculate Cp and Cpk instantly with this free, interactive web tool. No Excel needed – just input your data and get results with visualizations.
