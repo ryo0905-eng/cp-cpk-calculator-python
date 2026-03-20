@@ -69,8 +69,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const shareButton = document.querySelector("[data-share-results]");
     const copyButton = document.querySelector("[data-copy-results]");
+    const exportButton = document.querySelector("[data-export-results]");
     const shareMessage = document.querySelector("[data-share-message]");
     const shareText = {% if results %}"Cp {{ '%.2f'|format(results.cp) }}, Cpk {{ '%.2f'|format(results.cpk) }}, status: {{ status.title }}. Check your process capability here: {{ canonical_url }}"{% else %}""{% endif %};
+    const resultRows = {% if results %}[
+        ["Metric", "Value"],
+        ["Status", {{ status.title|tojson }}],
+        ["Status message", {{ status.message|tojson }}],
+        ["Input mode", {{ form.input_mode|tojson }}],
+        ["Sample dataset", {{ form.sample_key|tojson }}],
+        ["USL", {{ form.usl|tojson }}],
+        ["LSL", {{ form.lsl|tojson }}],
+        ["Sample size", {{ results.n|tojson }}],
+        ["Mean", {{ ('%.6f'|format(results.mean))|tojson }}],
+        ["Standard deviation", {{ ('%.6f'|format(results.std))|tojson }}],
+        ["Cp", {{ ('%.6f'|format(results.cp))|tojson }}],
+        ["CPU", {{ ('%.6f'|format(results.cpu))|tojson }}],
+        ["CPL", {{ ('%.6f'|format(results.cpl))|tojson }}],
+        ["Cpk", {{ ('%.6f'|format(results.cpk))|tojson }}]
+    ]{% else %}[]{% endif %};
+    const recommendationRows = {% if recommendations %}[
+        ["Recommendation"],
+        {% for item in recommendations %}
+        [{{ item|tojson }}]{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]{% else %}[]{% endif %};
 
     async function writeClipboard(text) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -85,6 +108,64 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         shareMessage.textContent = text;
+    }
+
+    function escapeCsvValue(value) {
+        const stringValue = String(value ?? "");
+        if (/[",\n]/.test(stringValue)) {
+            return '"' + stringValue.replace(/"/g, '""') + '"';
+        }
+        return stringValue;
+    }
+
+    function buildCsvContent() {
+        if (!resultRows.length) {
+            return "";
+        }
+
+        const sections = [
+            resultRows,
+            [],
+            recommendationRows,
+        ].filter(function (rows) {
+            return rows.length > 0;
+        });
+
+        return sections
+            .map(function (rows) {
+                return rows
+                    .map(function (row) {
+                        return row.map(escapeCsvValue).join(",");
+                    })
+                    .join("\n");
+            })
+            .join("\n\n");
+    }
+
+    function exportResultsCsv() {
+        const csvContent = buildCsvContent();
+        if (!csvContent) {
+            setShareMessage("Run a calculation before exporting a summary.");
+            return;
+        }
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const statusSlug = "{{ status.title|lower|replace(' ', '-') if status else 'capability' }}";
+
+        link.href = downloadUrl;
+        link.download = "cp-cpk-summary-" + statusSlug + ".csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(downloadUrl);
+
+        trackEvent("result_export_csv", {
+            event_category: "results",
+            event_label: "summary_csv",
+        });
+        setShareMessage("Result summary CSV downloaded.");
     }
 
     if (shareButton) {
@@ -143,6 +224,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 setShareMessage("Could not copy the result summary.");
             }
         });
+    }
+
+    if (exportButton) {
+        exportButton.addEventListener("click", exportResultsCsv);
     }
 
     {% if results %}
@@ -325,6 +410,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <a class="button button-primary" href="{{ url_for('content_page', slug='what-is-a-good-cpk-value') }}" data-track-event="result_cta_interpret" data-track-category="results" data-track-label="interpret_cpk">Interpret this Cpk</a>
                 <button class="button button-secondary" type="button" data-share-results>Share result</button>
                 <button class="button button-secondary" type="button" data-copy-results>Copy summary</button>
+                <button class="button button-secondary" type="button" data-export-results>Download summary CSV</button>
                 <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_feedback_results', this.href)">Share your use case</a>
                 <a class="button button-secondary" href="https://buymeacoffee.com/ryo.aihub" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_buy_me_a_coffee_results', this.href)">Support this tool</a>
             </div>
