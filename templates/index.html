@@ -43,6 +43,118 @@
   ]
 }
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const calculatorForm = document.querySelector(".form-panel");
+    if (calculatorForm) {
+        calculatorForm.addEventListener("submit", function () {
+            const inputMode = calculatorForm.querySelector('[name="input_mode"]')?.value || "unknown";
+            const sampleKey = calculatorForm.querySelector('[name="sample_key"]')?.value || "none";
+            trackEvent("calculate_click", {
+                event_category: "calculator",
+                input_mode: inputMode,
+                sample_key: sampleKey,
+            });
+        });
+    }
+
+    document.querySelectorAll("[data-track-event]").forEach(function (element) {
+        element.addEventListener("click", function () {
+            trackEvent(element.dataset.trackEvent, {
+                event_category: element.dataset.trackCategory || "engagement",
+                event_label: element.dataset.trackLabel || element.getAttribute("href") || element.textContent.trim(),
+            });
+        });
+    });
+
+    const shareButton = document.querySelector("[data-share-results]");
+    const copyButton = document.querySelector("[data-copy-results]");
+    const shareMessage = document.querySelector("[data-share-message]");
+    const shareText = {% if results %}"Cp {{ '%.2f'|format(results.cp) }}, Cpk {{ '%.2f'|format(results.cpk) }}, status: {{ status.title }}. Check your process capability here: {{ canonical_url }}"{% else %}""{% endif %};
+
+    async function writeClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        }
+        return false;
+    }
+
+    function setShareMessage(text) {
+        if (!shareMessage) {
+            return;
+        }
+        shareMessage.textContent = text;
+    }
+
+    if (shareButton) {
+        shareButton.addEventListener("click", async function () {
+            if (!shareText) {
+                return;
+            }
+
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: "Cp / Cpk Calculator",
+                        text: shareText,
+                        url: "{{ canonical_url }}",
+                    });
+                    trackEvent("result_share_native", {
+                        event_category: "results",
+                        event_label: "native_share",
+                    });
+                    setShareMessage("Share sheet opened.");
+                    return;
+                }
+
+                const copied = await writeClipboard(shareText);
+                if (copied) {
+                    trackEvent("result_share_copy_fallback", {
+                        event_category: "results",
+                        event_label: "share_fallback_copy",
+                    });
+                    setShareMessage("Result summary copied.");
+                }
+            } catch (error) {
+                setShareMessage("Share was cancelled.");
+            }
+        });
+    }
+
+    if (copyButton) {
+        copyButton.addEventListener("click", async function () {
+            if (!shareText) {
+                return;
+            }
+
+            try {
+                const copied = await writeClipboard(shareText);
+                if (copied) {
+                    trackEvent("result_copy_summary", {
+                        event_category: "results",
+                        event_label: "copy_summary",
+                    });
+                    setShareMessage("Result summary copied.");
+                } else {
+                    setShareMessage("Clipboard is not available in this browser.");
+                }
+            } catch (error) {
+                setShareMessage("Could not copy the result summary.");
+            }
+        });
+    }
+
+    {% if results %}
+    trackEvent("calculation_success", {
+        event_category: "calculator",
+        input_mode: "{{ form.input_mode }}",
+        sample_key: "{{ form.sample_key }}",
+        cpk_band: "{% if results.cpk >= 1.33 %}good{% elif results.cpk >= 1.0 %}watch{% else %}risk{% endif %}",
+    });
+    {% endif %}
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -121,9 +233,9 @@
         <div class="sample-switcher">
             <span>Quick sample views</span>
             <div class="sample-switcher-actions">
-                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='good'">Good process</button>
-                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='shifted'">Shifted process</button>
-                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='high-variation'">High variation</button>
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='good'; trackEvent('sample_used', { event_category: 'calculator', sample_key: 'good' });">Good process</button>
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='shifted'; trackEvent('sample_used', { event_category: 'calculator', sample_key: 'shifted' });">Shifted process</button>
+                <button class="chip-button" type="submit" name="input_mode" value="sample" onclick="this.form.sample_key.value='high-variation'; trackEvent('sample_used', { event_category: 'calculator', sample_key: 'high-variation' });">High variation</button>
             </div>
         </div>
         <label class="field">
@@ -165,7 +277,7 @@
         <div class="download-list">
             <h3>Sample CSVs</h3>
             {% for key, sample in sample_options.items() %}
-            <a href="{{ url_for('download_sample', sample_key=key) }}">{{ sample.filename }}</a>
+            <a href="{{ url_for('download_sample', sample_key=key) }}" data-track-event="sample_csv_download" data-track-category="calculator" data-track-label="{{ key }}">{{ sample.filename }}</a>
             {% endfor %}
         </div>
     </form>
@@ -201,6 +313,26 @@
         <section class="panel {{ status.level }}">
             <h2>{{ status.title }}</h2>
             <p>{{ status.message }}</p>
+        </section>
+
+        <section class="panel result-cta-panel">
+            <div class="result-cta-copy">
+                <p class="eyebrow">Next Best Actions</p>
+                <h2>Turn this result into the next step</h2>
+                <p>Keep momentum while the capability result is fresh. Review the interpretation, share the tool with a teammate, or support future improvements.</p>
+            </div>
+            <div class="result-cta-actions">
+                <a class="button button-primary" href="{{ url_for('content_page', slug='what-is-a-good-cpk-value') }}" data-track-event="result_cta_interpret" data-track-category="results" data-track-label="interpret_cpk">Interpret this Cpk</a>
+                <button class="button button-secondary" type="button" data-share-results>Share result</button>
+                <button class="button button-secondary" type="button" data-copy-results>Copy summary</button>
+                <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_feedback_results', this.href)">Share your use case</a>
+                <a class="button button-secondary" href="https://buymeacoffee.com/ryo.aihub" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_buy_me_a_coffee_results', this.href)">Support this tool</a>
+            </div>
+            <p class="share-message" data-share-message aria-live="polite"></p>
+            <div class="result-cta-links">
+                <a href="{{ url_for('content_page', slug='cp-vs-cpk') }}" data-track-event="result_related_content" data-track-category="results" data-track-label="cp_vs_cpk">Understand Cp vs Cpk</a>
+                <a href="{{ url_for('content_page', slug='how-to-calculate-cp-cpk') }}" data-track-event="result_related_content" data-track-category="results" data-track-label="how_to_calculate">See the calculation steps</a>
+            </div>
         </section>
 
         <section class="panel chart-panel">
