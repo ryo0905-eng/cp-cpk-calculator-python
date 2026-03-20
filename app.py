@@ -1,8 +1,10 @@
+import os
+
 from flask import Flask
 
 from web.routes import register_routes
 
-STATIC_ASSET_VERSION = "20260320b"
+STATIC_ASSET_VERSION = os.getenv("RENDER_GIT_COMMIT", "dev")
 
 
 def create_app() -> Flask:
