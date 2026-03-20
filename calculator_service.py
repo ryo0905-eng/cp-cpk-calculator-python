@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from io import StringIO
 
-import pandas as pd
-import plotly.io as pio
-
 from analysis import calculate_capability, interpret_results, make_histogram, recommendation_text
 from sample_catalog import get_sample_series
 
@@ -22,6 +19,8 @@ CALCULATOR_PAGE = {
 
 
 def parse_numeric_series(uploaded_file) -> pd.Series | None:
+    import pandas as pd
+
     if uploaded_file is None or uploaded_file.filename == "":
         return None
 
@@ -62,6 +61,8 @@ def build_initial_calculator_state() -> dict:
 
 
 def run_calculation(form: dict, uploaded_file) -> dict:
+    import plotly.io as pio
+
     usl = float(form["usl"])
     lsl = float(form["lsl"])
     if usl <= lsl:

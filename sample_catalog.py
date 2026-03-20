@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from io import BytesIO
 
-import pandas as pd
-
 from sample_data import GOOD_SAMPLE, HIGH_VAR_SAMPLE, SHIFTED_SAMPLE, build_sample_csv
 
 
@@ -27,6 +25,8 @@ SAMPLE_OPTIONS = {
 
 
 def get_sample_series(sample_key: str | None) -> pd.Series | None:
+    import pandas as pd
+
     if not sample_key or sample_key not in SAMPLE_OPTIONS:
         return None
     return pd.Series(SAMPLE_OPTIONS[sample_key]["values"])

@@ -61,6 +61,10 @@ def register_routes(app) -> None:
         ]
         return Response("\n".join(lines), mimetype="text/plain")
 
+    @app.route("/healthz", endpoint="healthz")
+    def healthz():
+        return Response("ok", mimetype="text/plain")
+
     @app.route("/sitemap.xml", endpoint="sitemap")
     def sitemap():
         pages = [{"loc": request.url_root.rstrip("/") + url_for("index"), "priority": "1.0"}]

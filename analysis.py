@@ -1,9 +1,9 @@
+from __future__ import annotations
+
 import numpy as np
-import pandas as pd
-import plotly.express as px
 
 
-def calculate_capability(data: pd.Series, usl: float, lsl: float) -> dict:
+def calculate_capability(data, usl: float, lsl: float) -> dict:
     mean = float(np.mean(data))
     std = float(np.std(data, ddof=1))
 
@@ -78,7 +78,9 @@ def recommendation_text(cp: float, cpk: float) -> list[str]:
     ]
 
 
-def make_histogram(data: pd.Series, usl: float, lsl: float):
+def make_histogram(data, usl: float, lsl: float):
+    import plotly.express as px
+
     mean_val = float(np.mean(data))
     fig = px.histogram(
         x=data,
