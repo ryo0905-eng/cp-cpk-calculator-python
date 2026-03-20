@@ -70,6 +70,12 @@ a:hover {
     padding: 16px 0;
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .brand {
     display: inline-flex;
     align-items: center;
@@ -110,6 +116,37 @@ a:hover {
     color: var(--text);
     border-color: rgba(29, 78, 216, 0.22);
     background: rgba(255, 255, 255, 0.92);
+}
+
+.github-link,
+.footer-text-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.github-link {
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    white-space: nowrap;
+}
+
+.github-link svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+}
+
+.github-link:hover,
+.footer-text-link:hover,
+.support-link-fallback:hover {
+    color: var(--text);
 }
 
 .hero,
@@ -726,6 +763,11 @@ thead th {
         padding: 14px 0;
     }
 
+    .nav-actions {
+        display: grid;
+        gap: 12px;
+    }
+
     .site-nav {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -741,6 +783,11 @@ thead th {
     .site-nav a {
         flex: 0 0 auto;
         white-space: nowrap;
+    }
+
+    .github-link {
+        justify-content: center;
+        width: 100%;
     }
 
     .hero,
