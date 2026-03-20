@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "DoE Planner",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "{{ meta_description }}"
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const exportButton = document.querySelector("[data-export-doe-csv]");
+    const exportMessage = document.querySelector("[data-export-message]");
+    const csvContent = {{ csv_content|tojson }};
+
+    function setExportMessage(text) {
+        if (!exportMessage) {
+            return;
+        }
+        exportMessage.textContent = text;
+    }
+
+    if (exportButton) {
+        exportButton.addEventListener("click", function () {
+            if (!csvContent) {
+                setExportMessage("Generate a plan before exporting.");
+                return;
+            }
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const downloadUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = downloadUrl;
+            link.download = "doe-plan-" + {{ summary.factor_count if summary else 0 }} + "-factors.csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(downloadUrl);
+
+            trackEvent("doe_export_csv", {
+                event_category: "doe",
+                factor_count: {{ summary.factor_count if summary else 0 }},
+            });
+            setExportMessage("DoE plan CSV downloaded.");
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% set active_fields = factor_fields[:form.factor_count] %}
+<section class="content-hero">
+    <div class="container hero-shell hero-grid">
+        <div class="hero-copy-block">
+            <p class="eyebrow">Experiment Planning Tool</p>
+            <h1>Build a practical DoE plan with orthogonal arrays.</h1>
+            <p class="hero-copy">Choose an orthogonal array or full factorial design, set factor names and levels, randomize the run order, and download a planning sheet your team can use right away.</p>
+            <div class="hero-badges">
+                <span>2 to 5 factors</span>
+                <span>L4 / L8 / L16</span>
+                <span>2-level screening</span>
+                <span>Randomized run order</span>
+                <span>CSV export</span>
+            </div>
+            <div class="hero-links">
+                <a class="button button-primary" href="#doe-builder">Open DoE planner</a>
+                <a class="button button-secondary" href="{{ url_for('index') }}">Use Cp / Cpk calculator</a>
+            </div>
+        </div>
+        <aside class="hero-preview panel">
+            <div class="hero-preview-head">
+                <div>
+                    <p class="eyebrow">Plan Snapshot</p>
+                    <h2>Current setup</h2>
+                </div>
+                <span class="status-pill">{{ summary.run_count if summary else 0 }} runs</span>
+            </div>
+            <div class="preview-metrics">
+                <article>
+                    <span>Factors</span>
+                    <strong>{{ summary.factor_count if summary else form.factor_count }}</strong>
+                </article>
+                <article>
+                    <span>Design</span>
+                    <strong>{{ summary.design_label if summary else "Auto OA" }}</strong>
+                </article>
+            </div>
+            <p class="preview-copy">Use this planner to move from capability diagnosis into a structured experiment plan without opening a spreadsheet first.</p>
+        </aside>
+    </div>
+</section>
+
+<section class="container app-grid" id="doe-builder">
+    <form class="panel form-panel" method="post">
+        <div class="section-intro">
+            <p class="eyebrow">Planning Inputs</p>
+            <h2><span class="section-icon">01</span> DoE setup</h2>
+            <p>Build a practical screening plan with an orthogonal array, or switch to full factorial when you need every combination.</p>
+        </div>
+
+        <label class="field">
+            <span>Design type</span>
+            <select name="design_type">
+                {% for option in design_options %}
+                <option value="{{ option.value }}" {% if form.design_type == option.value %}selected{% endif %}>{{ option.label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="field">
+            <span>Number of factors</span>
+            <select name="factor_count">
+                {% for count in range(2, 6) %}
+                <option value="{{ count }}" {% if form.factor_count == count %}selected{% endif %}>{{ count }} factors</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="checkbox-field">
+            <input type="checkbox" name="randomize" {% if form.randomize %}checked{% endif %}>
+            <span>Randomize run order</span>
+        </label>
+
+        {% for factor in factor_fields %}
+        <fieldset class="factor-card {% if factor.index > form.factor_count %}factor-card-hidden{% endif %}">
+            <legend>Factor {{ factor.index }}</legend>
+            <label class="field">
+                <span>Name</span>
+                <input type="text" name="factor_{{ factor.index }}_name" value="{{ form['factor_' ~ factor.index ~ '_name'] }}">
+            </label>
+            <div class="field-row">
+                <label class="field">
+                    <span>Low</span>
+                    <input type="text" name="factor_{{ factor.index }}_low" value="{{ form['factor_' ~ factor.index ~ '_low'] }}">
+                </label>
+                <label class="field">
+                    <span>High</span>
+                    <input type="text" name="factor_{{ factor.index }}_high" value="{{ form['factor_' ~ factor.index ~ '_high'] }}">
+                </label>
+            </div>
+        </fieldset>
+        {% endfor %}
+
+        <button class="button button-primary" type="submit">Generate plan</button>
+    </form>
+
+    <div class="results-column">
+        {% if error_message %}
+        <div class="panel alert alert-error">
+            <strong>Check your setup.</strong>
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+
+        {% if summary %}
+        <section class="panel results-header">
+            <div>
+                <p class="eyebrow">Planning Output</p>
+                <h2><span class="section-icon">02</span> DoE plan overview</h2>
+                <p>Use the generated run order as your experiment sheet, then capture responses back into the CSV.</p>
+            </div>
+            <a class="button button-secondary" href="{{ url_for('content_page', slug='how-to-calculate-cp-cpk') }}">Capability guide</a>
+        </section>
+
+        <section class="metrics-grid">
+            <article class="metric-card"><span>Factors</span><strong>{{ summary.factor_count }}</strong></article>
+            <article class="metric-card"><span>Runs</span><strong>{{ summary.run_count }}</strong></article>
+            <article class="metric-card"><span>Order</span><strong>{% if summary.randomized %}Random{% else %}Standard{% endif %}</strong></article>
+            <article class="metric-card"><span>Design</span><strong>{{ summary.design_label }}</strong></article>
+        </section>
+
+        <section class="panel result-cta-panel">
+            <div class="result-cta-copy">
+                <p class="eyebrow">Next Best Actions</p>
+                <h2>Take the plan into production</h2>
+                <p>{{ summary.design_notes }} Download the run sheet, record the response for each run, and use the Cp / Cpk calculator after the trial if you want to check capability on the improved condition.</p>
+            </div>
+            <div class="result-cta-actions">
+                <button class="button button-primary" type="button" data-export-doe-csv>Download planning CSV</button>
+                <a class="button button-secondary" href="{{ url_for('index') }}">Open Cp / Cpk calculator</a>
+                <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_feedback_doe', this.href)">Share your use case</a>
+            </div>
+            <p class="share-message" data-export-message aria-live="polite"></p>
+        </section>
+
+        <section class="panel two-col">
+            <div>
+                <h2>Factor settings</h2>
+                <ul>
+                    {% for factor in active_fields %}
+                    <li>{{ factor.name }}: {{ factor.low }} to {{ factor.high }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h2>How to use this plan</h2>
+                <p>Run each trial in the listed order, measure the response, and keep process conditions stable outside the chosen factors.</p>
+                <p>The CSV includes both actual levels and coded levels so you can continue the analysis in Excel, Python, or other statistical tools.</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Run table</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Run</th>
+                            <th>Standard</th>
+                            {% for factor in active_fields %}
+                            <th>{{ factor.name }}</th>
+                            {% endfor %}
+                            {% for factor in active_fields %}
+                            <th>{{ factor.name }} coded</th>
+                            {% endfor %}
+                            <th>Response</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in table %}
+                        <tr>
+                            <td>{{ row.run_order }}</td>
+                            <td>{{ row.standard_order }}</td>
+                            {% for value in row.actual_values %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                            {% for value in row.coded_values %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</section>
+
+<section class="container seo-grid">
+    <article class="panel">
+        <h2>What this DoE planner is for</h2>
+        <p>This tool is built for practical experiment setup when you want a clean orthogonal array or factorial planning sheet without building the matrix manually. It is especially useful for process improvement, parameter screening, and quick shop-floor studies.</p>
+    </article>
+    <article class="panel">
+        <h2>What this MVP covers</h2>
+        <p>The planner now supports orthogonal array presets such as L4, L8, and L16 alongside full factorial generation for 2 to 5 factors. It does not yet calculate effects or ANOVA, but it removes the setup friction so you can get to execution faster.</p>
+    </article>
+    <article class="panel">
+        <h2>How it fits with Cp / Cpk</h2>
+        <p>Use Cp / Cpk to diagnose process capability, then use this DoE planner to test improvement ideas in a structured way. That makes the toolset more useful for real manufacturing work instead of stopping at diagnosis.</p>
+    </article>
+</section>
+{% endblock %}

@@ -165,6 +165,14 @@ a:hover {
     align-items: stretch;
 }
 
+.hero-grid > *,
+.app-grid > *,
+.results-column,
+.hero-copy-block,
+.hero-preview {
+    min-width: 0;
+}
+
 .hero-shell {
     align-items: center;
 }
@@ -461,6 +469,24 @@ h3 {
     gap: 8px;
 }
 
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 18px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(248, 250, 252, 0.92);
+    font-weight: 700;
+}
+
+.checkbox-field input {
+    width: 18px;
+    min-height: 18px;
+    margin: 0;
+}
+
 .field {
     margin-bottom: 16px;
 }
@@ -516,6 +542,27 @@ small {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.factor-card {
+    margin: 0 0 16px;
+    padding: 16px;
+    min-width: 0;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 22px;
+    background: rgba(248, 250, 252, 0.82);
+}
+
+.factor-card legend {
+    padding: 0 8px;
+    color: #334155;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.factor-card-hidden {
+    display: none;
 }
 
 .chip-button {
@@ -635,6 +682,7 @@ small {
 
 .table-wrap {
     overflow: auto;
+    max-width: 100%;
     max-height: 320px;
     border-radius: 18px;
     border: 1px solid rgba(15, 23, 42, 0.08);
@@ -643,6 +691,7 @@ small {
 
 table {
     width: 100%;
+    min-width: max-content;
     border-collapse: collapse;
 }
 

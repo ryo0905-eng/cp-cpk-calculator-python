@@ -10,6 +10,7 @@ from services.calculator import (
     get_form_state,
     run_calculation,
 )
+from services.doe import DOE_PAGE, build_doe_plan, build_initial_doe_state, get_doe_form_state
 
 
 def build_base_context(**kwargs) -> dict:
@@ -73,6 +74,7 @@ def register_routes(app) -> None:
     @app.route("/sitemap.xml", endpoint="sitemap")
     def sitemap():
         pages = [{"loc": request.url_root.rstrip("/") + url_for("index"), "priority": "1.0"}]
+        pages.append({"loc": request.url_root.rstrip("/") + url_for("doe_planner"), "priority": "0.9"})
         for slug in CONTENT_PAGES:
             pages.append(
                 {
@@ -82,6 +84,26 @@ def register_routes(app) -> None:
             )
 
         return render_template("sitemap.xml", pages=pages), 200, {"Content-Type": "application/xml"}
+
+    @app.route("/doe-planner", methods=["GET", "POST"], endpoint="doe_planner")
+    def doe_planner():
+        state = build_initial_doe_state()
+
+        if request.method == "POST":
+            state["form"], state["factor_fields"] = get_doe_form_state(request.form)
+            try:
+                state.update(build_doe_plan(state["form"]))
+            except Exception as exc:
+                state["error_message"] = str(exc)
+
+        return render_template(
+            "doe_planner.html",
+            **build_base_context(
+                page_title=DOE_PAGE["page_title"],
+                meta_description=DOE_PAGE["meta_description"],
+                **state,
+            ),
+        )
 
     @app.route("/<slug>", endpoint="content_page")
     def content_page(slug: str):

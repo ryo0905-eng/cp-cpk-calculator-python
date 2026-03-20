@@ -114,10 +114,10 @@ Python `3.11` is recommended for local development and deployment.
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python app.py
+./.venv/bin/python app.py
 ```
 
-Then open `http://127.0.0.1:5000`.
+Then open `http://127.0.0.1:8000`.
 
 ## Example Interpretation
 
