@@ -23,6 +23,13 @@ Maximize speed to monetization.
 - Prioritize tools that are quick to use (no login, instant results)
 - Suggest monetization ideas when relevant (donation, paid features)
 
+## Site Context
+- The main blog is on `ryo-aihub.com`
+- This app is the tool site deployed at `tools.ryo-aihub.com`
+- The tool is deployed on Render
+- Prefer strategies where the blog drives SEO traffic and the tool converts visitors into users
+- When suggesting content strategy, treat WordPress on `ryo-aihub.com` as the primary place for long-form blog articles
+
 ## Behavior
 - Be concise
 - Prefer actionable output
