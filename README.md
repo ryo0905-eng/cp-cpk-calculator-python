@@ -1,108 +1,168 @@
-# Cp vs Cpk Calculator (Python) – Free Process Capability Tool
+# Cp / Cpk Calculator
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Tool-blue)](https://tools.ryo-aihub.com/)
 [![GitHub stars](https://img.shields.io/github/stars/ryo0905-eng/cp-cpk-calculator-python?style=social)](https://github.com/ryo0905-eng/cp-cpk-calculator-python)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Calculate Cp and Cpk instantly with this free, interactive web tool. No Excel needed – just input your data and get results with visualizations.
+A simple Flask web app for process capability analysis.
 
-👉 **Try it now:** [Live Cp/Cpk Calculator](https://tools.ryo-aihub.com/)
+This tool lets you upload measurement data from a CSV file, enter `USL` and `LSL`, and instantly calculate:
 
-![Cp/Cpk Calculator Interface](tool%20screenshot.png)
+- `Cp`
+- `CPU`
+- `CPL`
+- `Cpk`
 
-*Input your process data and instantly see Cp, Cpk values with interactive visualization.*
+It also shows a histogram, capability interpretation, sample datasets, and practical next-step guidance for manufacturing and quality teams.
 
----
+👉 **Live demo:** [tools.ryo-aihub.com](https://tools.ryo-aihub.com/)
 
-## 🚀 What is Cp and Cpk?
+![Cp / Cpk Calculator screenshot](tool%20screenshot.png)
 
-- **Cp** (Process Capability): Measures how well your process fits within specification limits, focusing on variation.
-- **Cpk** (Process Capability Index): Measures both variation and how centered your process is.
+## Why This Project
 
-In manufacturing and quality control, **Cpk is crucial** because it accounts for process centering. A high Cp with low Cpk means your process is stable but off-target, leading to defects.
+Process capability checks are often done in spreadsheets, which makes quick reviews harder than they need to be.
 
----
+This app gives you a lightweight browser-based workflow for:
 
-## ⚠️ Why Cp Alone Can Be Misleading
+- checking whether a process is capable
+- seeing whether the process is off-center
+- comparing sample scenarios before using real data
+- reviewing results in a way that is easier to explain to teammates
 
-Imagine a process with:
-- Cp = 1.8 (seems excellent)
-- Cpk = 0.6 (actually poor)
+If you just want to answer "Is this process actually healthy?" without building an Excel sheet first, this tool is for you.
 
-This indicates the process is consistent but shifted away from the target, potentially causing quality issues.
+## What This Tool Is For
 
-👉 **Don't get fooled – always check Cpk!**
+This project is designed for people who want to quickly check whether a process is capable and whether it is centered within specification limits.
 
----
+- `Cp` tells you how much process spread fits inside the spec width.
+- `Cpk` tells you how capable the process actually is after considering centering.
 
-## 📊 Quick Python Example
+A process can have a high `Cp` but still a poor `Cpk` if the mean is shifted toward one limit. That is why `Cpk` is often the more practical number when reviewing process risk.
+
+## Features
+
+- Upload a CSV file and use the first column as measurement data
+- Use built-in sample datasets for quick testing
+- Calculate `Cp`, `CPU`, `CPL`, and `Cpk`
+- Visualize the distribution with spec limits and mean
+- Get a plain-language capability interpretation
+- Review recommended next checks based on the result
+- Run everything locally with Python and Flask
+
+## At A Glance
+
+- Input: sample data or your own CSV
+- Required values: `USL` and `LSL`
+- Output: capability metrics, histogram, interpretation, and suggested next checks
+- Best for: manufacturing, quality, process engineering, and teaching basic capability analysis
+
+## How To Use
+
+1. Open the [live tool](https://tools.ryo-aihub.com/) or run the app locally.
+2. Choose sample data or upload a CSV file.
+3. Enter `USL` and `LSL`.
+4. Click `Calculate capability`.
+5. Review the metrics, chart, and interpretation.
+
+### CSV Format
+
+The app reads the **first column** of the CSV as numeric measurement values.
+
+Example:
+
+```csv
+value
+9.8
+10.1
+9.9
+10.0
+10.2
+```
+
+## Formula Reference
+
+```text
+Cp  = (USL - LSL) / (6 x sigma)
+CPU = (USL - Mean) / (3 x sigma)
+CPL = (Mean - LSL) / (3 x sigma)
+Cpk = min(CPU, CPL)
+```
+
+## Quick Python Example
 
 ```python
 def calc_cp_cpk(mean, std, lsl, usl):
     cp = (usl - lsl) / (6 * std)
-    cpk = min((usl - mean) / (3 * std), (mean - lsl) / (3 * std))
+    cpu = (usl - mean) / (3 * std)
+    cpl = (mean - lsl) / (3 * std)
+    cpk = min(cpu, cpl)
     return cp, cpk
 
-# Example usage
+
 mean, std, lsl, usl = 10, 1, 8, 12
 cp, cpk = calc_cp_cpk(mean, std, lsl, usl)
 print(f"Cp: {cp:.2f}, Cpk: {cpk:.2f}")
 ```
 
----
+## Run Locally
 
-## 📈 Tool Screenshot
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
 
-Here's what the live Cp/Cpk calculator looks like in action:
+Then open `http://127.0.0.1:5000`.
 
-![Cp/Cpk Calculator Interface](tool%20screenshot.png)
+## Example Interpretation
 
-*Input your process data and instantly see Cp, Cpk values with interactive visualization.*
+- High `Cp` and high `Cpk`: the process is tight and well-centered
+- High `Cp` and low `Cpk`: variation may be acceptable, but the process is shifted
+- Low `Cp` and low `Cpk`: the process spread itself is too wide for the spec
 
----
+This side-by-side view is one of the main reasons engineers review `Cp` and `Cpk` together instead of looking at only one metric.
 
-## ✨ Features
+## FAQ
 
-- ✅ **Instant Calculations**: Get Cp and Cpk values in seconds
-- ✅ **Interactive Visualizations**: See your process distribution
-- ✅ **No Software Required**: Works directly in your browser
-- ✅ **Free to Use**: Open-source and ad-free
-- ✅ **Educational**: Learn with built-in examples
-- ✅ **Mobile-Friendly**: Use on any device
+### What is the difference between Cp and Cpk?
 
----
+`Cp` looks at spread only. `Cpk` looks at spread plus centering.
 
-## 🎯 Who Should Use This?
+### What is a good Cpk value?
 
-- Manufacturing Engineers
-- Quality Control Specialists
-- Six Sigma Practitioners
-- Data Analysts
+Many teams use `1.33` as a practical target, but the right threshold depends on customer requirements, product risk, and process stability.
+
+### What kind of CSV can I upload?
+
+Any CSV where the first column contains numeric measurement values. Non-numeric values are ignored.
+
+## Project Structure
+
+```text
+app.py                  Flask entry point
+web/routes.py           Routes and page rendering
+services/analysis.py    Capability calculations and chart helpers
+services/calculator.py  Form handling and calculator flow
+data/sample_catalog.py  Built-in sample datasets
+templates/              HTML templates
+static/                 CSS assets
+```
+
+## Who This Is Useful For
+
+- Manufacturing engineers
+- Quality engineers
+- Six Sigma practitioners
+- Process engineers
 - Students learning process capability
 
----
+## Contributing
 
-## 🛠️ How to Use
+Issues and pull requests are welcome. If you find a bug, want to improve the UX, or want to expand the capability analysis content, feel free to open a discussion.
 
-1. Visit the [Live Tool](https://tools.ryo-aihub.com/)
-2. Enter your process mean, standard deviation, LSL, and USL
-3. Click "Calculate" to see Cp, Cpk, and visualization
-4. Interpret results: Cpk > 1.33 is typically excellent
+## License
 
----
-
-## 🔍 SEO Keywords
-
-Cp calculator, Cpk calculator, process capability index, quality control tool, Six Sigma calculator, manufacturing quality, statistical process control, capability analysis, Python quality tool
-
----
-
-## 📞 Contact & Support
-
-Found this helpful? Star the repo ⭐ and share with colleagues!
-
-For questions or contributions, open an issue on GitHub.
-
----
-
-*Built with Python, hosted on a custom web platform. Open-source under MIT License.*
+MIT License. See [LICENSE](LICENSE).
