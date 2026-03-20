@@ -14,6 +14,8 @@ Maximize speed to monetization.
 - Always suggest UX improvements that increase usage
 - Respond in Japanese unless the user asks otherwise
 - After changes, do a light validation when feasible
+- When running local checks or app verification, prefer the project virtual environment at `.venv` if it exists
+- Use `.venv/bin/python` and related tools for validation before falling back to the system Python
 - Prioritize SEO, CTA, and funnel improvements when suggesting enhancements
 
 ## Product Strategy
