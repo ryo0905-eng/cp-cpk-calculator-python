@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Manufacturing & Statistics Tools",
+  "description": "{{ meta_description }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-shell home-hero-grid">
+        <div class="hero-copy-block">
+            <p class="eyebrow">Manufacturing & Statistics Tools</p>
+            <h1>Free tools for process capability, DoE, and practical engineering work.</h1>
+            <p class="hero-copy">Use focused tools that help you evaluate capability, plan experiments, and move faster from diagnosis to improvement without opening a spreadsheet first.</p>
+            <div class="hero-badges">
+                <span>No login</span>
+                <span>Fast setup</span>
+                <span>CSV export</span>
+                <span>Built for real manufacturing work</span>
+            </div>
+            <div class="hero-links">
+                <a class="button button-primary" href="{{ url_for('cp_cpk_calculator') }}">Open Cp / Cpk Calculator</a>
+                <a class="button button-secondary" href="{{ url_for('doe_planner') }}">Open DoE Planner</a>
+            </div>
+        </div>
+        <aside class="hero-preview panel">
+            <div class="hero-preview-head">
+                <div>
+                    <p class="eyebrow">Tool Flow</p>
+                    <h2>Use the right tool for the job</h2>
+                </div>
+                <span class="status-pill">2 live tools</span>
+            </div>
+            <div class="portal-steps">
+                <article>
+                    <strong>1. Evaluate capability</strong>
+                    <span>Check Cp and Cpk when you need to understand spread and centering against spec limits.</span>
+                </article>
+                <article>
+                    <strong>2. Plan improvement work</strong>
+                    <span>Use DoE when you want to structure trial conditions and screen factors efficiently.</span>
+                </article>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="container seo-grid">
+    <article class="panel tool-card tool-card-featured">
+        <p class="eyebrow">Live Tool</p>
+        <h2>Cp / Cpk Calculator</h2>
+        <p>Upload data, enter USL and LSL, and get capability metrics, a histogram, interpretation, and exportable result summary in one workflow.</p>
+        <div class="tool-card-tags">
+            <span>Capability</span>
+            <span>CSV upload</span>
+            <span>Result summary export</span>
+        </div>
+        <div class="tool-card-actions">
+            <a class="button button-primary" href="{{ url_for('cp_cpk_calculator') }}">Use Cp / Cpk Tool</a>
+            <a class="button button-secondary" href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Learn Cp vs Cpk</a>
+        </div>
+    </article>
+
+    <article class="panel tool-card tool-card-featured">
+        <p class="eyebrow">Live Tool</p>
+        <h2>DoE Planner</h2>
+        <p>Create orthogonal array or full factorial planning sheets, randomize run order, and export a clean experiment table for shop-floor or lab trials.</p>
+        <div class="tool-card-tags">
+            <span>L4 / L8 / L16</span>
+            <span>Randomized runs</span>
+            <span>Planning CSV</span>
+        </div>
+        <div class="tool-card-actions">
+            <a class="button button-primary" href="{{ url_for('doe_planner') }}">Use DoE Planner</a>
+            <a class="button button-secondary" href="{{ url_for('cp_cpk_calculator') }}">Check Cp / Cpk After Trials</a>
+        </div>
+    </article>
+    <article class="panel">
+        <h2>Pick the right tool</h2>
+        <p>If you want to know whether a process can meet specification limits, start with the Cp / Cpk calculator. If you already know there is a problem and want to test process settings, move to the DoE planner.</p>
+    </article>
+    <article class="panel">
+        <h2>Suggested workflow</h2>
+        <p>Review process capability first, decide whether the issue is spread or centering, then plan a structured experiment to test the settings that may improve the process.</p>
+    </article>
+    <article class="panel">
+        <h2>Coming next</h2>
+        <p>This tool collection is designed to expand into other practical quality and manufacturing workflows such as control charts, MSA, and sample size planning.</p>
+    </article>
+</section>
+{% endblock %}

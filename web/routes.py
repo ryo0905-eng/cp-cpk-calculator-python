@@ -24,8 +24,18 @@ def build_base_context(**kwargs) -> dict:
 
 
 def register_routes(app) -> None:
-    @app.route("/", methods=["GET", "POST"], endpoint="index")
+    @app.route("/", endpoint="index")
     def index():
+        return render_template(
+            "home.html",
+            **build_base_context(
+                page_title="Manufacturing & Statistics Tools | Free Cp/Cpk and DoE Tools",
+                meta_description="Free manufacturing and statistics tools for practical engineering work. Use the Cp/Cpk calculator and DoE planner to evaluate capability and plan experiments.",
+            ),
+        )
+
+    @app.route("/cp-cpk-calculator", methods=["GET", "POST"], endpoint="cp_cpk_calculator")
+    def cp_cpk_calculator():
         state = build_initial_calculator_state()
 
         if request.method == "POST":
@@ -74,6 +84,7 @@ def register_routes(app) -> None:
     @app.route("/sitemap.xml", endpoint="sitemap")
     def sitemap():
         pages = [{"loc": request.url_root.rstrip("/") + url_for("index"), "priority": "1.0"}]
+        pages.append({"loc": request.url_root.rstrip("/") + url_for("cp_cpk_calculator"), "priority": "0.9"})
         pages.append({"loc": request.url_root.rstrip("/") + url_for("doe_planner"), "priority": "0.9"})
         for slug in CONTENT_PAGES:
             pages.append(

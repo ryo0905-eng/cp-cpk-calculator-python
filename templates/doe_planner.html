@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="hero-links">
                 <a class="button button-primary" href="#doe-builder">Open DoE planner</a>
-                <a class="button button-secondary" href="{{ url_for('index') }}">Use Cp / Cpk calculator</a>
+                <a class="button button-secondary" href="{{ url_for('cp_cpk_calculator') }}">Use Cp / Cpk calculator</a>
             </div>
         </div>
         <aside class="hero-preview panel">
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="result-cta-actions">
                 <button class="button button-primary" type="button" data-export-doe-csv>Download planning CSV</button>
-                <a class="button button-secondary" href="{{ url_for('index') }}">Open Cp / Cpk calculator</a>
+                <a class="button button-secondary" href="{{ url_for('cp_cpk_calculator') }}">Open Cp / Cpk calculator</a>
                 <a class="button button-secondary" href="https://forms.gle/2sQdwEbdmH4JPKjD7" target="_blank" rel="noopener noreferrer" onclick="trackOutboundClick('click_feedback_doe', this.href)">Share your use case</a>
             </div>
             <p class="share-message" data-export-message aria-live="polite"></p>

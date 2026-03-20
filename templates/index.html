@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hero-copy-block">
             <p class="eyebrow">Process Capability Analysis Platform</p>
             <h1>Process capability analysis built for quality and manufacturing teams.</h1>
-            <p class="hero-copy">Calculate Cp, Cpk, Pp, and Ppk in a clear, modern workspace designed for practical engineering review and day-to-day process decisions.</p>
+            <p class="hero-copy">Calculate Cp and Cpk in a clear, modern workspace designed for practical engineering review and day-to-day process decisions.</p>
             <div class="hero-badges">
                 <span>Practical workflow</span>
                 <span>CSV upload</span>
@@ -257,6 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="hero-links">
                 <a class="button button-primary" href="#calculator">Open calculator</a>
+                <a class="button button-secondary" href="{{ url_for('doe_planner') }}">Go to DoE planner</a>
                 <a class="button button-secondary" href="{{ url_for('content_page', slug='cp-vs-cpk') }}">Learn Cp vs Cpk</a>
             </div>
         </div>
