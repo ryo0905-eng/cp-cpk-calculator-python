@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=config['STATIC_ASSET_VERSION']) }}">
     {% block head_extra %}{% endblock %}
 </head>
-<body>
+<body{% if body_class %} class="{{ body_class }}"{% endif %}>
     <header class="site-header">
         <div class="container nav-shell">
             <a class="brand" href="{{ url_for('index') }}">Manufacturing Stat Tools</a>

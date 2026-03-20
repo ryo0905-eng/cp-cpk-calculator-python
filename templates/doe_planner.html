@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% set body_class = "page-doe" %}
+
 {% block head_extra %}
 <script type="application/ld+json">
 {
@@ -13,15 +15,105 @@
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    const plannerForm = document.querySelector(".form-panel");
+    const factorCountSelect = plannerForm?.querySelector('[name="factor_count"]');
+    const designTypeSelect = plannerForm?.querySelector('[name="design_type"]');
+    const factorCards = Array.from(document.querySelectorAll(".factor-card"));
+    const presetButtons = Array.from(document.querySelectorAll("[data-doe-preset]"));
     const exportButton = document.querySelector("[data-export-doe-csv]");
     const exportMessage = document.querySelector("[data-export-message]");
     const csvContent = {{ csv_content|tojson }};
+    const presets = {
+        screening_l8: {
+            designType: "orthogonal_auto",
+            factorCount: 5,
+            randomize: true,
+            factors: [
+                ["Temperature", "Low", "High"],
+                ["Pressure", "Low", "High"],
+                ["Time", "Short", "Long"],
+                ["Speed", "Slow", "Fast"],
+                ["Feed rate", "Low", "High"]
+            ]
+        },
+        compact_l4: {
+            designType: "orthogonal_l4",
+            factorCount: 3,
+            randomize: true,
+            factors: [
+                ["Temperature", "Low", "High"],
+                ["Pressure", "Low", "High"],
+                ["Time", "Short", "Long"]
+            ]
+        },
+        factorial_3: {
+            designType: "full_factorial",
+            factorCount: 3,
+            randomize: true,
+            factors: [
+                ["Temperature", "Low", "High"],
+                ["Pressure", "Low", "High"],
+                ["Time", "Short", "Long"]
+            ]
+        }
+    };
+
+    function syncFactorCards() {
+        if (!factorCountSelect) {
+            return;
+        }
+
+        const factorCount = Number(factorCountSelect.value || 0);
+        factorCards.forEach(function (card) {
+            const factorIndex = Number(card.dataset.factorIndex || 0);
+            card.classList.toggle("factor-card-hidden", factorIndex > factorCount);
+        });
+    }
 
     function setExportMessage(text) {
         if (!exportMessage) {
             return;
         }
         exportMessage.textContent = text;
+    }
+
+    function applyPreset(presetKey) {
+        const preset = presets[presetKey];
+        if (!preset || !plannerForm) {
+            return;
+        }
+
+        if (designTypeSelect) {
+            designTypeSelect.value = preset.designType;
+        }
+        if (factorCountSelect) {
+            factorCountSelect.value = String(preset.factorCount);
+        }
+
+        const randomizeInput = plannerForm.querySelector('[name="randomize"]');
+        if (randomizeInput) {
+            randomizeInput.checked = preset.randomize;
+        }
+
+        for (let index = 1; index <= 5; index += 1) {
+            const factor = preset.factors[index - 1] || ["Factor " + index, "Low", "High"];
+            const nameInput = plannerForm.querySelector('[name="factor_' + index + '_name"]');
+            const lowInput = plannerForm.querySelector('[name="factor_' + index + '_low"]');
+            const highInput = plannerForm.querySelector('[name="factor_' + index + '_high"]');
+
+            if (nameInput) {
+                nameInput.value = factor[0];
+            }
+            if (lowInput) {
+                lowInput.value = factor[1];
+            }
+            if (highInput) {
+                highInput.value = factor[2];
+            }
+        }
+
+        syncFactorCards();
+        plannerForm.submit();
     }
 
     if (exportButton) {
@@ -49,6 +141,17 @@ document.addEventListener("DOMContentLoaded", function () {
             setExportMessage("DoE plan CSV downloaded.");
         });
     }
+
+    if (factorCountSelect) {
+        factorCountSelect.addEventListener("change", syncFactorCards);
+        syncFactorCards();
+    }
+
+    presetButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            applyPreset(button.dataset.doePreset);
+        });
+    });
 });
 </script>
 {% endblock %}
@@ -104,6 +207,15 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>Build a practical screening plan with an orthogonal array, or switch to full factorial when you need every combination.</p>
         </div>
 
+        <div class="sample-switcher">
+            <span>Quick setup</span>
+            <div class="sample-switcher-actions">
+                <button class="chip-button" type="button" data-doe-preset="screening_l8">5-factor screening</button>
+                <button class="chip-button" type="button" data-doe-preset="compact_l4">3-factor L4</button>
+                <button class="chip-button" type="button" data-doe-preset="factorial_3">3-factor full factorial</button>
+            </div>
+        </div>
+
         <label class="field">
             <span>Design type</span>
             <select name="design_type">
@@ -128,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </label>
 
         {% for factor in factor_fields %}
-        <fieldset class="factor-card {% if factor.index > form.factor_count %}factor-card-hidden{% endif %}">
+        <fieldset class="factor-card {% if factor.index > form.factor_count %}factor-card-hidden{% endif %}" data-factor-index="{{ factor.index }}">
             <legend>Factor {{ factor.index }}</legend>
             <label class="field">
                 <span>Name</span>
