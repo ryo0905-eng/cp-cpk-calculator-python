@@ -108,6 +108,8 @@ print(f"Cp: {cp:.2f}, Cpk: {cpk:.2f}")
 
 ## Run Locally
 
+Python `3.11` is recommended for local development and deployment.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
