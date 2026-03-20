@@ -2,7 +2,7 @@ from flask import Flask
 
 from web.routes import register_routes
 
-STATIC_ASSET_VERSION = "20260320a"
+STATIC_ASSET_VERSION = "20260320b"
 
 
 def create_app() -> Flask:
