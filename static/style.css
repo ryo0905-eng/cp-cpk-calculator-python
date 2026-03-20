@@ -144,8 +144,7 @@ a:hover {
 }
 
 .github-link:hover,
-.footer-text-link:hover,
-.support-link-fallback:hover {
+.footer-text-link:hover {
     color: var(--text);
 }
 
@@ -693,25 +692,22 @@ thead th {
     background: rgba(248, 250, 252, 0.86);
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 30px 0 36px;
-}
-
 .support-strip {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    padding: 0 0 34px;
+    gap: 24px;
+    padding: 28px 0 34px;
 }
 
 .support-copy {
     display: grid;
-    gap: 6px;
-    max-width: 640px;
+    gap: 8px;
+    max-width: 560px;
+}
+
+.support-copy h2 {
+    margin-bottom: 0;
 }
 
 .support-copy p {
@@ -727,17 +723,10 @@ thead th {
     justify-content: flex-end;
 }
 
-.support-link-fallback {
-    color: var(--muted);
-    font-size: 0.92rem;
-    font-weight: 700;
-}
-
 @media (max-width: 1080px) {
     .hero-grid,
     .app-grid,
     .two-col,
-    .footer-grid,
     .related-grid {
         grid-template-columns: 1fr;
     }
