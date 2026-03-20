@@ -2,9 +2,14 @@ from __future__ import annotations
 
 from flask import Response, render_template, request, send_file, url_for
 
-from calculator_service import CALCULATOR_PAGE, build_initial_calculator_state, get_form_state, run_calculation
-from content_pages import CONTENT_PAGES, get_page_faqs, get_related_pages
-from sample_catalog import SAMPLE_OPTIONS, build_sample_file
+from content.pages import CONTENT_PAGES, get_page_faqs, get_related_pages
+from data.sample_catalog import SAMPLE_OPTIONS, build_sample_file
+from services.calculator import (
+    CALCULATOR_PAGE,
+    build_initial_calculator_state,
+    get_form_state,
+    run_calculation,
+)
 
 
 def build_base_context(**kwargs) -> dict:

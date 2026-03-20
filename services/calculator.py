@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from io import StringIO
 
-from analysis import calculate_capability, interpret_results, make_histogram, recommendation_text
-from sample_catalog import get_sample_series
+from data.sample_catalog import get_sample_series
+from services.analysis import calculate_capability, interpret_results, make_histogram, recommendation_text
 
 DEFAULT_FORM = {
     "input_mode": "sample",

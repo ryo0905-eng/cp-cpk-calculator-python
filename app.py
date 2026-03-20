@@ -1,6 +1,6 @@
 from flask import Flask
 
-from routes import register_routes
+from web.routes import register_routes
 
 STATIC_ASSET_VERSION = "20260320a"
 

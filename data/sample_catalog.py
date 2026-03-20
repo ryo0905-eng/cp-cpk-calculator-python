@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from io import BytesIO
 
-from sample_data import GOOD_SAMPLE, HIGH_VAR_SAMPLE, SHIFTED_SAMPLE, build_sample_csv
+from data.sample_data import GOOD_SAMPLE, HIGH_VAR_SAMPLE, SHIFTED_SAMPLE, build_sample_csv
 
 
 SAMPLE_OPTIONS = {
