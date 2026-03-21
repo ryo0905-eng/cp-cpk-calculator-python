@@ -12,6 +12,17 @@ from services.calculator import (
 )
 from services.doe import DOE_PAGE, build_doe_plan, build_initial_doe_state, get_doe_form_state
 
+GUIDE_PRIORITY_ORDER = [
+    "cp-vs-cpk",
+    "what-is-a-good-cpk-value",
+    "how-to-calculate-cp-cpk",
+    "what-is-cpk",
+    "what-is-cp",
+    "cp-formula",
+    "what-is-pp-ppk",
+    "pp-vs-ppk",
+]
+
 
 def build_base_context(**kwargs) -> dict:
     base_url = request.url_root.rstrip("/")
@@ -54,6 +65,32 @@ def register_routes(app) -> None:
             ),
         )
 
+    @app.route("/guides", endpoint="guides")
+    def guides():
+        guide_pages = []
+
+        for slug in GUIDE_PRIORITY_ORDER:
+            page = CONTENT_PAGES.get(slug)
+            if page is None:
+                continue
+            guide_pages.append(
+                {
+                    "slug": slug,
+                    "title": page["title"],
+                    "heading": page["heading"],
+                    "description": page["description"],
+                }
+            )
+
+        return render_template(
+            "guides.html",
+            **build_base_context(
+                page_title="Process Capability Guides | Cp, Cpk, Pp, and Ppk Articles",
+                meta_description="Browse practical guides about Cp, Cpk, Pp, Ppk, and process capability analysis, then jump into the tools when you are ready to use them.",
+                guide_pages=guide_pages,
+            ),
+        )
+
     @app.route("/download/<sample_key>.csv", endpoint="download_sample")
     def download_sample(sample_key: str):
         sample_file = build_sample_file(sample_key)
@@ -86,6 +123,7 @@ def register_routes(app) -> None:
         pages = [{"loc": request.url_root.rstrip("/") + url_for("index"), "priority": "1.0"}]
         pages.append({"loc": request.url_root.rstrip("/") + url_for("cp_cpk_calculator"), "priority": "0.9"})
         pages.append({"loc": request.url_root.rstrip("/") + url_for("doe_planner"), "priority": "0.9"})
+        pages.append({"loc": request.url_root.rstrip("/") + url_for("guides"), "priority": "0.8"})
         for slug in CONTENT_PAGES:
             pages.append(
                 {

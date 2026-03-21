@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Process Capability Guides",
+  "description": "{{ meta_description }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="content-hero">
+    <div class="container narrow">
+        <p class="eyebrow">Guides</p>
+        <h1>Learn the concepts, then jump into the tools.</h1>
+        <p class="hero-copy">Browse practical guides on Cp, Cpk, Pp, Ppk, and process capability topics, then move straight into the calculator or DoE planner when you are ready to act.</p>
+        <div class="hero-links">
+            <a class="button button-primary" href="{{ url_for('cp_cpk_calculator') }}">Open Cp / Cpk Calculator</a>
+            <a class="button button-secondary" href="{{ url_for('doe_planner') }}">Open DoE Planner</a>
+        </div>
+    </div>
+</section>
+
+<section class="container seo-grid">
+    {% for guide in guide_pages %}
+    <article class="panel tool-card">
+        <h2>{{ guide.heading }}</h2>
+        <p>{{ guide.description }}</p>
+        <div class="tool-card-actions">
+            <a class="button button-secondary" href="{{ url_for('content_page', slug=guide.slug) }}">Read guide</a>
+        </div>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}
