@@ -2,16 +2,6 @@ from __future__ import annotations
 
 from flask import Response, render_template, request, send_file, url_for
 
-from content.pages import CONTENT_PAGES, get_page_faqs, get_related_pages
-from data.sample_catalog import SAMPLE_OPTIONS, build_sample_file
-from services.calculator import (
-    CALCULATOR_PAGE,
-    build_initial_calculator_state,
-    get_form_state,
-    run_calculation,
-)
-from services.doe import DOE_PAGE, build_doe_plan, build_initial_doe_state, get_doe_form_state
-
 GUIDE_PRIORITY_ORDER = [
     "cp-vs-cpk",
     "what-is-a-good-cpk-value",
@@ -25,6 +15,8 @@ GUIDE_PRIORITY_ORDER = [
 
 
 def build_base_context(**kwargs) -> dict:
+    from data.sample_catalog import SAMPLE_OPTIONS
+
     base_url = request.url_root.rstrip("/")
     return {
         "base_url": base_url,
@@ -47,6 +39,13 @@ def register_routes(app) -> None:
 
     @app.route("/cp-cpk-calculator", methods=["GET", "POST"], endpoint="cp_cpk_calculator")
     def cp_cpk_calculator():
+        from services.calculator import (
+            CALCULATOR_PAGE,
+            build_initial_calculator_state,
+            get_form_state,
+            run_calculation,
+        )
+
         state = build_initial_calculator_state()
 
         if request.method == "POST":
@@ -67,6 +66,8 @@ def register_routes(app) -> None:
 
     @app.route("/guides", endpoint="guides")
     def guides():
+        from content.pages import CONTENT_PAGES
+
         guide_pages = []
 
         for slug in GUIDE_PRIORITY_ORDER:
@@ -93,6 +94,8 @@ def register_routes(app) -> None:
 
     @app.route("/download/<sample_key>.csv", endpoint="download_sample")
     def download_sample(sample_key: str):
+        from data.sample_catalog import build_sample_file
+
         sample_file = build_sample_file(sample_key)
         if sample_file is None:
             return Response("Not found", status=404)
@@ -120,6 +123,8 @@ def register_routes(app) -> None:
 
     @app.route("/sitemap.xml", endpoint="sitemap")
     def sitemap():
+        from content.pages import CONTENT_PAGES
+
         pages = [{"loc": request.url_root.rstrip("/") + url_for("index"), "priority": "1.0"}]
         pages.append({"loc": request.url_root.rstrip("/") + url_for("cp_cpk_calculator"), "priority": "0.9"})
         pages.append({"loc": request.url_root.rstrip("/") + url_for("doe_planner"), "priority": "0.9"})
@@ -136,6 +141,8 @@ def register_routes(app) -> None:
 
     @app.route("/doe-planner", methods=["GET", "POST"], endpoint="doe_planner")
     def doe_planner():
+        from services.doe import DOE_PAGE, build_doe_plan, build_initial_doe_state, get_doe_form_state
+
         state = build_initial_doe_state()
 
         if request.method == "POST":
@@ -156,6 +163,8 @@ def register_routes(app) -> None:
 
     @app.route("/<slug>", endpoint="content_page")
     def content_page(slug: str):
+        from content.pages import CONTENT_PAGES, get_page_faqs, get_related_pages
+
         page = CONTENT_PAGES.get(slug)
         if page is None:
             return Response("Not found", status=404)
